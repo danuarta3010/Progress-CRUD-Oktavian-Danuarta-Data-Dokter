@@ -125,6 +125,76 @@ app.delete('/delete/dokter/:id', (req, res) =>{
     })
 })
 
+//CRUD Rumah Sakit
+app.get('/rumahsakit', (req,res)=>{
+    let sql = `select * from rumah_sakit`
+
+    db.query(sql, (err, result)=>{
+        if(err) throw err
+
+        res.json({
+            success: true,
+            data: result
+        })
+    })
+})
+
+app.post('/input/rumahsakit', (req, res)=>{
+    let data = req.body
+    let sql =  `insert into rumah_sakit (id_dokter, nama_rs, alamat, jadwal_buka, jdawal tutup)
+                values ('`+data.id_dokter+`',
+                        '`+data.nama_rs+`',
+                        '`+data.alamat+`',
+                        '`+data.jadwal_buka+`',
+                        '`+data.jadwal_tutup+`')
+    `
+
+    db.query(sql, (err, result)=>{
+        if(err) throw err
+
+        res.json({
+            success: true,
+            message: "Success insert data rumah sakit"
+        })
+    })
+})
+
+app.put('/update/rumahsakit/:id', (req, res)=>{
+    let data = req.body
+
+    let sql = `update rumah sakit set 
+                id_dokter = '`+data.id_dokter+`',
+                alamat = '`+data.alamat+`',
+                jadwal_buka = '`+data.jadwal_buka+`',
+                jadwal_tutup = '`+data.jadwal_tutup+`'
+
+                where id = '`+req.params.id+`'
+    `
+
+    db.query(sql, (err, result)=>{
+        if(err) throw err
+
+        res.json({
+            success: true,
+            message: "success update rumah sakit",
+            data: result
+        })
+    })
+})
+
+app.delete('/delete/rumahsakit/:id', (req, res)=>{
+    let sql = `delete form rumah_sakit where id = '`+req.params.id+`'`
+
+    db.query(sql, (err, result)=>{
+        if(err) throw err
+
+        res.json({
+            success: true,
+            message: "Success delete from rumah sakit"
+        })
+    })
+})
+
 app.listen(port, () =>{
     console.log('App run on port ' + port)
 })
