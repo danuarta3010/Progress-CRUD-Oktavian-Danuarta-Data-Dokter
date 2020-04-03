@@ -81,8 +81,8 @@ app.get('/dokter', isAuthorized, (req, res) =>{
 app.post('/input/dokter',isAuthorized, (req, res)=>{
     let data = req.body
     let sql = `
-        insert into dokter (nama, alamat, telepon, specialist, id_rumahsakit)
-        values ('`+data.nama+`', '`+data.alamat+`','`+data.telepon+`', '`+data.specialist+`','`+data.id_rumahsakit+`')
+        insert into dokter (nama, alamat, telepon, specialist)
+        values ('`+data.nama+`', '`+data.alamat+`','`+data.telepon+`', '`+data.specialist+`')
     `
     db.query(sql, (err, result) =>{
         if(err) throw err
@@ -112,7 +112,7 @@ app.put('/update/dokter/:id', isAuthorized, (req, res) =>{
     })
 })
 
-app.delete('/delete/dokter/:id', (req, res) =>{
+app.delete('/delete/dokter/:id',isAuthorized, (req, res) =>{
     let sql = `delete from dokter where id_dokter = '`+req.params.id+`'`
 
     db.query(sql, (err) =>{
@@ -194,6 +194,20 @@ app.delete('/delete/rumahsakit/:id', (req, res)=>{
             message: "Success delete from rumah sakit"
         })
     })
+})
+
+app.get('/dokter_rs',isAuthorized, (req, res)=>{
+    let sql = `select * from dokter inner join rumah_sakit on dokter.id_dokter=rumah_sakit.id_dokter`
+
+    db.query(sql, (err, result)=>{
+        if(err) throw err
+
+        res.json({
+            success: true,
+            data: result
+        })
+    })
+
 })
 
 app.listen(port, () =>{
